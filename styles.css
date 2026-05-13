@@ -1,701 +1,84 @@
-/* styles.css */
-body {
-    font-family: Arial, sans-serif;
-    margin: 50px;
-    padding: 0;
-    background-color: #5a8ed3;
-    background-image: url("Background.jpg"); /* Pad naar je achtergrondafbeelding */
-    background-size: cover; /* Zorgt ervoor dat de afbeelding de hele achtergrond bedekt */
-    background-position: center;
-}
-
-#container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-  
-header {
-    max-width: 100%;
-    overflow: hidden;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid #ddd;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-    justify-content: center;
-    
-}
-
-nav {
-    display: flex;
-    justify-content: center;
-}
-
-header h1 {
-    margin: 0;
-}
-
-button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-main {
-    padding: 20px;
-}
-
-#ledenLijst {
-    margin-top: 20px;
-}
-
-#ledenUl {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-#ledenUl li {
-    display: flex;
-    font-weight: bold;
-    align-items: center;
-    margin: 5px 0;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px; /* Ronde hoeken voor de lijstitems */
-    background-color: #fff; /* Witte achtergrondkleur */
-    color: #333; /* Donkere tekstkleur */
-    display: flex;
-    justify-content: space-between; /* Zorgt ervoor dat inhoud en knop aan weerszijden worden uitgelijnd */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Lichte schaduw voor diepte-effect */
-}
-
-#ledenUl li:hover {
-    background-color: #f0f0f0; /* Optioneel: voeg een hover-effect toe */
-}
-
-#ledenUl li:last-child {
-    border-bottom: none;
-}
-
-#totaalBedrag {
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: 20px;
-}
-/* drankjes index.html */
-#drankjesLijst {
-    position: relative;
-    padding-bottom: 50px; /* Voor ruimte voor de bevestig-knop */
-}
-
-#drankjesUl {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-#drankjesUl li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 5px 0;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px; /* Ronde hoeken voor de lijstitems */
-    background-color: #fff; /* Witte achtergrondkleur */
-    color: #333; /* Donkere tekstkleur */
-    display: flex;
-    justify-content: space-between; /* Zorgt ervoor dat inhoud en knop aan weerszijden worden uitgelijnd */
-    align-items: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Lichte schaduw voor diepte-effect */
-}
-
-#drankjesUl li:last-child {
-    border-bottom: none;
-}
-
-button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    font-size: 16px;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-#drankjesLijst button {
-    margin-top: 10px;
-    
-}
-
-#drankjesDetails {
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-between;
-    margin: 0px 0;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px; /* Ronde hoeken voor de lijstitems */
-    background-color: #fa7979; /* Witte achtergrondkleur */
-    color: #333; /* Donkere tekstkleur */
-    display: flex;
-    justify-content: space-between; /* Zorgt ervoor dat inhoud en knop aan weerszijden worden uitgelijnd */
-    align-items: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Lichte schaduw voor diepte-effect */
-}
-
-#drankjesDetails ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    
-}
-
-#drankjesDetails li {
-    display: flex;
-    justify-content: space-between;
-    padding: 5px 0;
-}
-
-#drankjesDetails li:last-child {
-    border-bottom: none;
-}
-
-#confirmOrder {
-    background-color: #00ad09;
-    font-weight: bold;
-    color: #fff;
-    border: none;
-    margin-left: 10px;
-    padding: 10px 20px;
-    border-radius: 4px;
-    font-size: 16px;
-}
-
-#confirmOrder:hover {
-    background-color: #0d5204;
-}
-
-#backToLeden {
-    background-color: #0088ff;
-    color: #fff;
-    border: none;
-    justify-content: flex-start;
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-#backToLeden:hover {
-    background-color: #005ba1;
-}
-
-#paidButton {
-    background-color: #dc3545;
-    color: #fff;
-    border: none;
-    padding: 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-}
-
-#paidButton:hover {
-    background-color: #c82333;
-}
-/* drankjes index.html */
-
-#adminPaneel {
-    padding-top: 20px;
-}
-
-form input {
-    padding: 10px;
-    margin-right: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-form button {
-    padding: 10px 20px;
-    
-}
-
-/* Basisstijl voor de admin pagina */
-
-header {
-    text-align: center;
-    margin-bottom: 20px;
-    
-}
-
-h1 {
-    margin: 0;
-}
-
-form {
-    margin-bottom: 20px;
-}
-
-form input,
-form button {
-    margin: 5px;
-}
-
-button {
-    padding: 10px 15px;
-    border: none;
-    color: #fff;
-    background-color: #007bff;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-#adminPaneel h2 {
-    margin-bottom: 10px;
-}
-
-/* Licht thema voor de ledenlijst */
-#ledenToRemove {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-#ledenToRemove li {
-    margin: 5px 0;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px; /* Ronde hoeken voor de lijstitems */
-    background-color: #fff; /* Witte achtergrondkleur */
-    color: #333; /* Donkere tekstkleur */
-    display: flex;
-    justify-content: space-between; /* Zorgt ervoor dat inhoud en knop aan weerszijden worden uitgelijnd */
-    align-items: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Lichte schaduw voor diepte-effect */
-}
-
-#ledenToRemove li button {
-    background-color: #ff0000; /* Rode achtergrondkleur voor de knop */
-    border: none;
-    color: #fff;
-    padding: 8px 12px;
-    cursor: pointer;
-    border-radius: 4px; /* Ronde hoeken voor de knop */
-    font-size: 0.9em; /* Kleinere tekst voor de knop */
-}
-
-#ledenToRemove li button:hover {
-    background-color: #b92929; /* Donkerder blauw bij hover */
-}
-#pincodeContainer {
-    margin-top: 20px;
-}
-
-#pincodeContainer input {
-    margin-right: 10px;
-}
-
-#drankjesToRemove {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-#drankjesToRemove li {
-
-    margin: 5px 0;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px; /* Ronde hoeken voor de lijstitems */
-    background-color: #fff; /* Witte achtergrondkleur */
-    color: #333; /* Donkere tekstkleur */
-    display: flex;
-    justify-content: space-between; /* Zorgt ervoor dat inhoud en knop aan weerszijden worden uitgelijnd */
-    align-items: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Lichte schaduw voor diepte-effect */
-}
-
-.hidden {
-    display: none;
-}
-
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-}
-
-.modal.show {
-    display: block;
-    opacity: 1;
-}
-
-.modal.hide {
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-}
-
-.modal-content {
-    background-color: rgba(255, 255, 255, 0.884);
-    padding: 20px;
-    margin: 15% auto;
-    width: 300px;
-    text-align: center;
-}
-
-button {
-    margin: 7px;
-}
-
-.draggable {
-    cursor: grab;
-    padding: 8px;
-    margin: 5px 0;
-    background-color: #f8f9fa;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.draggable.dragging {
-    opacity: 0.5;
-}
-
-#drankjesToRemove li {
-    cursor: grab;
-    padding: 8px;
-    margin: 4px 0;
-    background: #ffffff;
-    border: 1px solid #ccc;
-}
-
-#drankjesToRemove li.dragging {
-    opacity: 0.5;
-    background: #ffc1c1;
-}
-
-.popup {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    padding: 20px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-    z-index: 1000;
-}
-
-.popup-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.popup input {
-    margin: 10px 0;
-    padding: 8px;
-    font-size: 16px;
-    text-align: center;
-}
-
-.popup-buttons {
-    display: flex;
-    gap: 10px;
-}
-
-#pincodePopup {
-    display: none;
-    opacity: 0;
-    transition: opacity 0.5s;
-}
-
-#pincodePopup.visible {
-    display: block;
-    opacity: 1;
-}
-
-#notificationPopup {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #ffffff;
-    color: rgb(46, 46, 46);
-    padding: 10px;
-    border-radius: 5px;
-    display: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-#notificationPopup.visible {
-    display: block;
-    opacity: 1;
-}
-
-#notificationMessage {
-    font-size: 20px;
-}
-
-/* Pop-up container */
-.popup {
-    position: fixed;
-    top: 20%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: white;
-    color: white;
-    padding: 20px;
-    border-radius: 10px;
-    display: none;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    z-index: 9999;
-}
-
-.popup.visible {
-    display: block;
-    opacity: 1;
-}
-
-.popup-content {
-    font-size: 18px;
-    text-align: center;
-}
-
-h2 {
-    
-    font-size: 30px;
-    color: rgb(0, 0, 0);
-}
-
-.popup button {
-    margin-top: 10px;
-    background-color: #00ad09;
-    color: white;
-    padding: 5px 10px;
-    border: none;
-    cursor: pointer; 
-}
-
-.popup button:hover {
-    background-color: #005807;
-}
-
-#totalAmount {
-    font-size: 20px; /* Vergroot de tekst om het totaalbedrag goed zichtbaar te maken */
-    font-weight: bold; /* Maak de tekst vet voor beter zichtbaarheid */
-    color: #ffffff; /* Donkere kleur voor de tekst */
-    background-color: #00ad09; /* Lichte achtergrondkleur voor contrast */
-    padding: 15px; /* Ruimte rond de tekst */
-    border-radius: 8px; /* Ronde hoeken voor een zachtere uitstraling */
-    margin-top: 20px; /* Ruimte boven het totaalbedrag */
-    text-align: center; /* Centreer de tekst */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Lichte schaduw voor diepte */
-    max-width: 350px; /* Maximaliseer de breedte voor grote schermen */
-    margin-left: auto;
-    margin-right: auto; /* Centreer het element horizontaal */
-}
-
-#totalAmount span {
-    font-size: 28px; /* Vergroot de cijfers voor het totaalbedrag */
-    color: #007bff; /* Kleur voor het bedrag zelf */
-    font-weight: bold;
-    text-align: center; /* Centreer de tekst */
-    
-}
-
-/* Basisstijl voor de lijstitems */
-#drankjesToRemove li {
-    padding: 10px;
-    margin: 5px 0;
-    background-color: #ffffff;
-    border: 1px solid #e9e9e9;
-
-
-
-
-    
-    cursor: move;
-    transition: background-color 0.3s;
-}
-
-/* Stijl wanneer een item wordt gesleept */
-#drankjesToRemove li:active {
-    background-color: #ffffff;
-}
-
-/* Stijl voor het item wanneer het boven een ander item wordt gesleept */
-#drankjesToRemove li.dragging-over {
-    background-color: #ffffff; /* Verander de kleur wanneer het wordt vastgehouden boven een ander item */
-}
-
-/* Verandert de achtergrondkleur van de lijst wanneer het item wordt ingesleept */
-#drankjesToRemove li[draggable="true"] {
-    opacity: 1;
-}
-
-/* Verandert de achtergrondkleur van de lijst wanneer het item in de lucht hangt */
-#drankjesToRemove li[draggable="true"]:hover {
-    background-color: #afdbf8; /* Lichte blauwe tint */
-}
-
-footer {
-    margin-top: auto; /* Zorgt ervoor dat de footer naar beneden wordt geduwd */
-    text-align: center;
-    padding: 10px;
-    color: #000000;
-}
-
-footer p {
-    margin: 0;
-    text-align: center;
-    font-size: 14px;
-    align-items: center;
-}
-
-@media (max-width: 600px) {
-    body {
-        margin: 20px;
-    }
-
-    #container {
-        padding: 10px;
-    }
-
-    button {
-        padding: 8px 15px;
-        font-size: 14px;
-    }
-
-    #ledenUl li,
-    #drankjesUl li {
-        font-size: 14px;
-        padding: 10px;
-    }
-
-    #totaalBedrag,
-    #drankjesDetails {
-        font-size: 16px;
-    }
-}
-
-/* Statistics Page Styles */
+/* =========================
+   Statistics page – page-only styles
+   (leunt op shared.css voor basis UI)
+   ========================= */
+
+/* Container is al netjes via shared.css: header, nav, main, buttons, footer */
+/* Eventueel een subtiele section spacing */
 #statisticsSection {
     display: flex;
     flex-direction: column;
     gap: 20px;
-}
-
-.stats-card {
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.stats-card h2 {
-    border-bottom: 2px solid #007bff;
-    padding-bottom: 10px;
-    margin-bottom: 15px;
-    color: #007bff;
-}
-
-#topMemberslist, 
-#drinkSalesList {
-    list-style-type: decimal;
-    padding-left: 20px;
-}
-
-#topMemberslist li,
-#drinkSalesList li {
-    margin-bottom: 10px;
-    font-size: 16px;
-}
-
-#totalStats p {
+  }
+  
+  /* Kaarten voor blokken */
+  .stats-card {
+    background: #fff;                 /* in dark-mode wordt dit door shared overschreven op container-level */
+    border-radius: 12px;
+    padding: 16px 18px;
+    border: 2px solid #ddd;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  }
+  
+  body.dark-mode .stats-card {
+    background: #1e1e1e;
+    border-color: #333;
+    color: #eee;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+  }
+  
+  /* Titels in cards: match shared accent */
+  .stats-card h2 {
+    margin: 0 0 10px 0;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #0078d7;
+    color: #0078d7;
+  }
+  
+  body.dark-mode .stats-card h2 {
+    border-bottom-color: #444;
+    color: #ccc;
+  }
+  
+  /* Totalen */
+  #totalStats p {
     margin: 10px 0;
-    font-size: 18px;
-}
-
-#totalStats span {
-    font-weight: bold;
-    color: #007bff;
-}
-
-.header-buttons {
-    display: flex;
-    gap: 10px;
-}
-
-/* Styling for header buttons */
-.header-buttons {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-/* Reset button specific styling */
-.reset-button {
-    background-color: #dc3545;
-    color: white;
-    border: 2px solid #bd2130;
-    border-radius: 5px;
-    padding: 8px 12px;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.reset-button:hover {
-    background-color: #bd2130;
-    box-shadow: 0 0 10px rgba(220, 53, 69, 0.5);
-}
-
-.reset-button:active {
-    background-color: #a71d2a;
-    transform: scale(0.98);
-}
-
-/* Optional: Add a warning icon or subtle warning effect */
-.reset-button::before {
-    content: '⚠️';
-    margin-right: 5px;
-}
-
+    font-size: 1rem;
+  }
+  #totalStats span {
+    font-weight: 700;
+    color: #0078d7;
+  }
+  body.dark-mode #totalStats span {
+    color: #9ec5ff;
+  }
+  
+  /* Top-lijsten */
+  #topMemberslist,
+  #drinkSalesList {
+    list-style: decimal;
+    padding-left: 20px;
+    margin: 0;
+  }
+  #topMemberslist li,
+  #drinkSalesList li {
+    margin: 8px 0;
+    font-size: 0.98rem;
+  }
+  
+  /* Een prominente “totaalbedrag” badge als je die toont */
+  #totalAmount {
+    display: inline-block;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
+    background: #00ad09;
+    padding: 10px 14px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+    text-align: center;
+    min-width: 220px;
+  }
+  #totalAmount span {
+    font-size: 1.25rem;
+  }

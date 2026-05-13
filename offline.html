@@ -1,44 +1,26 @@
-<!DOCTYPE html>
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Offline - Wilhelmina Leens Bar</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
-      color: #333;
-      text-align: center;
-      padding: 50px;
-    }
-    h1 {
-      font-size: 3em;
-      margin-bottom: 0.2em;
-      color: #0078d7;
-    }
-    p {
-      font-size: 1.2em;
-      margin-bottom: 1.5em;
-    }
-    a {
-      text-decoration: none;
-      color: white;
-      background-color: #0078d7;
-      padding: 12px 24px;
-      border-radius: 5px;
-      font-weight: bold;
-      display: inline-block;
-    }
-    a:hover {
-      background-color: #005ea2;
-    }
-  </style>
+  <title>TapIn - Offline</title>
+  <link rel="stylesheet" href="shared.css" />
+  <link rel="stylesheet" href="offline.css" />
 </head>
 <body>
-  <h1>📴 Je bent offline</h1>
-  <p>De Wilhelmina Leens Bar app is momenteel niet verbonden met het internet.</p>
-  <p>Controleer je verbinding en probeer het opnieuw.</p>
-  <a href="./index.html">Ga terug naar de startpagina</a>
+  <div class="container">
+    <header>
+      <img src="" alt="TapIn logo" id="headerLogo" width="250" height="100"/>
+    </header>
+
+    <section class="stats-card offline-container">
+      <div class="spinner"></div>
+      <h1>Je bent offline</h1>
+      <p>TapIn is momenteel niet verbonden met het internet.</p>
+      <p>Controleer je verbinding en probeer het opnieuw.</p>
+      <a href="./index.html" class="primary-button">Ga terug naar de Leden</a>
+    </section>
+  </div>
+
+  <script src="shared.js"></script>
 </body>
 </html>

@@ -1,69 +1,161 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wilhelmina Leens - Bar Statistieken</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0078d7">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TapIn - Statistieken</title>
 
+  <!-- Shared styles (globaal) + optionele pagina-specifieke css -->
+  <link rel="stylesheet" href="shared.css"/>
+  <link rel="stylesheet" href="statistics.css"/>
+
+  <link rel="icon" type="image/png" href="favicon.png"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
 </head>
 <body>
-    <div id="container">
-        <header>
-            <img src="logo-Wilhelmina.jpg" alt="Wilhelmina Tap" id="headerLogo" width="250" height="100">
-        </header>
-        
-        <nav>
-            <div class="nav-buttons">
-                <button id="backButton">↩️Ledenlijst</button>
-                <button id="adminButton">👨‍🔧Admin Paneel</button>
-                <button id="resetAllButton" class="reset-button">Alles Resetten</button>
-            </div>
-        </nav>
-        <main>
-            <section id="statisticsSection">
-                <h1>Bar Statistieken</h1>
-                
-                <div class="stats-card">
-                    <h2>Totale Statistieken</h2>
-                    <div id="totalStats">
-                        <p>Totaal aantal leden: <span id="totalMembers">0</span></p>
-                        <p>Totaal besteed bedrag: € <span id="totalSpentAmount">0.00</span></p>
-                        <p>Meest populaire drankje: <span id="mostPopularDrink">Nog geen gegevens</span></p>
-                    </div>
-                </div>
-
-                <div class="stats-card">
-                    <h2>Top Spenders</h2>
-                    <ol id="topMemberslist"></ol>
-                </div>
-
-                <div class="stats-card">
-                    <h2>Totaal verkochte producten:</h2>
-                    <ul id="drinkSalesList"></ul>
-                </div>
-            </section>
-        </main>
-
-        <footer>
-            <p>&copy; 2025 Wilhelmina Leens. Alle rechten voorbehouden.</p>
-            <p>Ontwikkeld door Mark Steenhuis & Jurre Straatsma</p>
-        </footer>
+  <!-- Notificatie popup (zelfde component als admin) -->
+  <div id="notificationPopup" role="status" aria-live="polite">
+    <div class="popup-content">
+      <p id="notificationMessage"></p>
     </div>
-    
-    <script src="statistics.js"></script>
-    <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./service-worker.js')
-      .then(() => console.log('✅ Service worker geregistreerd!'))
-      .catch(err => console.error('❌ Fout bij service worker:', err));
-  }
-</script>
+  </div>
 
+  <!-- Reset bevestiging popup (zelfde markup als admin) -->
+  <div id="resetPopup" class="popup" role="dialog" aria-modal="true" aria-labelledby="resetPopupTitle">
+    <div class="popup-content">
+      <h2 id="resetPopupTitle">Weet je het zeker?</h2>
+      <p>Alles wordt teruggezet naar de standaard instellingen.</p>
+      <div class="popup-buttons" style="display:flex; gap:10px; justify-content:flex-end;">
+        <button id="confirmResetButton" class="reset-button" type="button">Ja, reset</button>
+        <button id="cancelResetButton" type="button">Annuleren</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="container">
+    <!-- Header -->
+    <header>
+      <img src="" alt="TapIn logo" id="headerLogo" width="250" height="100"/>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+      <div class="nav-buttons">
+        <button id="backButton" type="button">↩️ Ledenlijst</button>
+        <button id="adminButton" type="button">👨‍🔧 Admin Paneel</button>
+        <button id="toggle-theme" class="theme-toggle" aria-pressed="false" aria-label="Schakel dag/nacht">
+          <span class="icon sun">☀️</span>
+          <span class="icon moon">🌙</span>
+        <button id="resetAllButton" class="reset-button" type="button">Alles Resetten</button>
+      </div>
+    </nav>
+
+    <!-- Main statistics content -->
+    <main>
+      <section id="statisticsSection">
+        <div class="form-section">
+          <h1>Bar Statistieken</h1>
+        </div>
+
+        <div class="list-section stats-card">
+          <h2>Totale Statistieken</h2>
+          <div id="totalStats">
+            <p>Totaal aantal leden: <span id="totalMembers">0</span></p>
+            <p>Totaal besteed bedrag: € <span id="totalSpentAmount">0.00</span></p>
+            <p>Meest populaire drankje: <span id="mostPopularDrink">geen gegevens</span></p>
+          </div>
+        </div>
+
+        <div class="list-section stats-card">
+          <h2>Toppers van de Maand</h2>
+          <ol id="topMemberslist"></ol>
+        </div>
+
+        <div class="list-section stats-card">
+          <h2>Totaal verkochte producten</h2>
+          <ul id="drinkSalesList"></ul>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2025 TapIn. Alle rechten voorbehouden.</p>
+      <p>Ontwikkeld door Mark Steenhuis</p>
+      <button id="installButton" style="display:none;">📲 App installeren</button>
+    </footer>
+  </div>
+
+  <!-- Shared logic (dark mode, logo, notifications, PWA) -->
+  <script src="shared.js"></script>
+  <!-- Pagina-specifieke logic -->
+  <script src="statistics.js"></script>
+
+  <!-- Kleine pagina-hook voor nav + reset-popup -->
+  <script>
+    (function () {
+      const backButton = document.getElementById('backButton');
+      const adminButton = document.getElementById('adminButton');
+      const resetBtn   = document.getElementById('resetAllButton');
+
+      const resetPopup = document.getElementById('resetPopup');
+      const confirmResetButton = document.getElementById('confirmResetButton');
+      const cancelResetButton  = document.getElementById('cancelResetButton');
+
+      if (backButton)  backButton.addEventListener('click', () => location.href = 'index.html');
+      if (adminButton) adminButton.addEventListener('click', () => location.href = 'admin.html');
+
+      function doReset() {
+        // Zelfde reset als admin (layout + pin + dark mode). Pas uit als je ook drankjes/leden wil wissen.
+        //localStorage.removeItem('customLogo');
+        //localStorage.removeItem('customBackground');
+        //localStorage.removeItem('pinCode');
+        //localStorage.removeItem('darkMode');
+
+        // (Optioneel) als je ook data wil wissen:
+        // localStorage.removeItem('leden');
+        // localStorage.removeItem('drankjes');
+
+        // UI refresh
+        if (window.showNotification) {
+          showNotification('Alles is gereset naar standaard waarden!');
+        }
+        location.reload();
+      }
+
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          if (resetPopup) {
+            resetPopup.classList.remove('closing');
+            resetPopup.classList.add('visible');
+          } else {
+            if (confirm('Weet je zeker dat je alles wilt resetten naar standaard?')) doReset();
+          }
+        });
+      }
+
+      if (cancelResetButton) {
+        cancelResetButton.addEventListener('click', () => {
+          if (!resetPopup) return;
+          resetPopup.classList.add('closing');
+          setTimeout(() => {
+            resetPopup.classList.remove('closing', 'visible');
+          }, 500);
+        });
+      }
+
+      if (confirmResetButton) {
+        confirmResetButton.addEventListener('click', () => {
+          if (!resetPopup) { doReset(); return; }
+          resetPopup.classList.add('closing');
+          setTimeout(() => {
+            resetPopup.classList.remove('closing', 'visible');
+            doReset();
+          }, 300);
+        });
+      }
+    })();
+  </script>
 </body>
 </html>

@@ -1,0 +1,406 @@
+/* =========================
+   Index page – page-only styles
+   (leunt op shared.css voor basis UI / dark mode)
+   ========================= */
+
+/* Container en header komen uit shared.css; hier alleen pagina-specifieke lijsten/secties */
+
+/* ---------- Leden & Drankjes lijsten ---------- */
+#ledenLijst,
+#drankjesLijst {
+  position: relative;
+}
+
+#ledenUl,
+#drankjesUl {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#ledenUl li,
+#drankjesUl li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  margin: 6px 0;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #e6e6e6;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+  transition: transform 0.15s ease, background 0.2s ease;
+  font-weight: 600;
+}
+
+#ledenUl li:hover,
+#drankjesUl li:hover {
+  transform: translateY(-1px);
+  background: #f9fbff;
+}
+
+body.dark-mode #ledenUl li,
+body.dark-mode #drankjesUl li {
+  background: #1f1f1f;
+  border-color: #333;
+  color: #eee;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.25);
+}
+
+#drankjesUl li button {
+  flex-shrink: 0;
+}
+
+/* ---------- Totaal (overzicht) onder ledenlijst ---------- */
+#totaalBedrag {
+  margin-top: 12px;
+  font-weight: 700;
+}
+
+/* ---------- Drankjes details (kaart) ---------- */
+#drankjesDetails {
+  margin-top: 12px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid #e6e6e6;
+  background: #fff;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+}
+
+#drankjesDetails ul { margin: 0; padding: 0; list-style: none; }
+#drankjesDetails li { display: flex; justify-content: space-between; padding: 6px 0; }
+
+/* Donker thema voor detailskaart */
+body.dark-mode #drankjesDetails {
+  background: #1f1f1f;
+  border-color: #333;
+  color: #eee;
+}
+
+/* ---------- Terugknop in drankjes sectie ---------- */
+#drankjesLijst #backToLeden {
+  margin: 0 0 8px 0;
+}
+
+/* ---------- “Totaal: €..” badge (drankjes) ---------- */
+#totalAmount {
+  display: inline-block;
+  margin: 12px 0 0 0;
+  font-weight: 700;
+  color: #fff;
+  background: #00ad09;
+  padding: 10px 14px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  min-width: 180px;
+  text-align: center;
+}
+
+/* ---------- Betaalbevestiging modal (matcht popup-stijl) ---------- */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 6000;
+  background: rgba(0,0,0,0.4);
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.show { display: flex; }
+.modal.hide { display: flex; opacity: 0; transition: opacity 0.3s ease; }
+
+.modal-content {
+  background: #fff;
+  color: #222;
+  padding: 20px 22px;
+  border-radius: 12px;
+  width: min(420px, 92vw);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  text-align: center;
+  animation: modalIn 0.3s ease;
+}
+
+body.dark-mode .modal-content {
+  background: #2a2a2a;
+  color: #eee;
+}
+
+.modal-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+/* ---------- Header logo iets compacter op mobiel ---------- */
+#headerLogo { max-width: 250px; height: auto; }
+@media (max-width: 600px) { #headerLogo { max-width: 180px; } }
+
+/* ---------- Footer (kleur via shared.css) ---------- */
+footer p { margin: 0; }
+
+/* ---------- Kleine responsive tweaks ---------- */
+@media (max-width: 768px) {
+  #ledenUl li, #drankjesUl li {
+    padding: 10px 12px;
+    font-size: 0.96rem;
+  }
+}
+
+/* ---------- Keyframes ---------- */
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Ledenlijst container (light/dark) */
+.list-container {
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-top: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  }
+  
+  /* Dark mode variant */
+  body.dark-mode .list-container {
+    background: #1f1f1f;
+    border-color: #333;
+    color: #eee;
+    box-shadow: 0 2px 14px rgba(0,0,0,0.35);
+  }
+  
+  /* Optioneel: kopje boven container mooi in thema */
+  #ledenLijst > h2 {
+    margin: 0 0 8px 2px;
+    color: var(--theme-color, #0078d7);
+  }
+  body.dark-mode #ledenLijst > h2 {
+    color: #ccc;
+  }
+
+  /* Footer rij met totaal + actieknop naast elkaar */
+.drinks-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* Totaal badge blijft opvallend */
+.drinks-footer #totalAmount {
+  margin: 0;
+  font-size: 1.0rem;
+  font-weight: bold;
+  color: var(#ccc);
+}
+
+/* Betaald-knop */
+.drinks-footer #confirmOrder {
+  background: #00ad09;
+  border: none;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 0.2s ease;
+  white-space: nowrap;
+}
+
+.drinks-footer #confirmOrder:hover {
+  filter: brightness(0.95);
+}
+
+/* === Drankjes details als grid met kaartjes === */
+/* =========================
+   Drankjes details – kaartjes stijl
+   ========================= */
+   #drankjesDetails {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+  }
+  
+  .drink-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .drink-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  
+  .drink-card .drink-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0078d7;
+  }
+  
+  .drink-card .drink-total {
+    margin-top: 6px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #333;
+  }
+  
+  /* Dark-mode styling */
+  body.dark-mode .drink-card {
+    background: #1e1e1e;
+    border-color: #333;
+    color: #eee;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  }
+  
+  body.dark-mode .drink-card .drink-name {
+    color: #9ec5ff;
+  }
+  
+  body.dark-mode .drink-card .drink-total {
+    color: #fff;
+  }
+
+/* =========================
+   Drink list: +1 / −1 knoppen (light/dark)
+   ========================= */
+
+/* Optioneel: thematische variabelen (pas gerust aan) */
+:root {
+  --btn-success: #00ad09;
+  --btn-success-hover: #0d5204;
+  --btn-danger: #dc3545;
+  --btn-danger-hover: #a71d2a;
+  --card-bg: #ffffff;
+  --card-border: #ddd;
+  --card-text: #333;
+}
+
+body.dark-mode {
+  --btn-success: #1f9e37;
+  --btn-success-hover: #17782a;
+  --btn-danger: #c44551;
+  --btn-danger-hover: #92323b;
+  --card-bg: #1e1e1e;
+  --card-border: #333;
+  --card-text: #eee;
+}
+
+/* Lijstitems (drankjes) als kaarten, meeschakelend met dark-mode */
+#drankjesUl li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+
+  padding: 12px 14px;
+  margin: 6px 0;
+  border-radius: 10px;
+
+  background: var(--card-bg);
+  color: var(--card-text);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+#drankjesUl li:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+/* Container voor de knoppen */
+.drink-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+/* Basestijl knoppen */
+.drink-buttons button {
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.08s ease;
+}
+
+.drink-buttons button:active {
+  transform: translateY(1px);
+}
+
+/* +1 (groen) */
+.drink-buttons .add-btn {
+  background: var(--btn-success);
+  color: #fff;
+}
+.drink-buttons .add-btn:hover {
+  background: var(--btn-success-hover);
+}
+
+/* −1 (rood) */
+.drink-buttons .remove-btn {
+  background: var(--btn-danger);
+  color: #fff;
+}
+.drink-buttons .remove-btn:hover {
+  background: var(--btn-danger-hover);
+}
+
+/* (optioneel) tekstspan in li consistent stylen */
+#drankjesUl li > span {
+  font-weight: 600;
+}
+
+
+  /* Dark mode */
+  body.dark-mode .drinks-footer {
+    background: #1e1e1e;
+    border-top-color: #333;
+  }
+  
+  body.dark-mode .drinks-footer p {
+    color: #eee;
+  }
+  
+/* Kleinere schermen */
+@media (max-width: 480px) {
+  .drinks-grid {
+    grid-template-columns: 1fr 1fr; /* twee kolommen op klein scherm */
+    gap: 10px;
+  }
+}
+
+.drinks-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.drinks-footer #totalAmount {
+  margin: 0;             /* hou ‘m compact */
+  font-size: 0.95rem;    /* klein houden zoals je vroeg */
+  padding: 8px 10px;
+}
+
+.drinks-footer .footer-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+

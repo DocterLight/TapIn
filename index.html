@@ -1,15 +1,14 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="manifest" href="./manifest.json">
+</script>
     <meta name="theme-color" content="#0078d7">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Wilhelmina Leens - BarLijst</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="image/png" href="favicon.png">
+    <title>TapIn - Homepage</title>
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
     <div id="confirmationModal" class="modal">
@@ -21,55 +20,74 @@
         </div>
     </div>
 
+        <!-- === Pincode tab === -->
+        <div id="pinPopup" class="popup" role="dialog" aria-modal="true">
+          <div class="popup-content">
+            <h2>Rekening Legen</h2>
+            <p>Weet je zeker dat je deze wijziging wilt doorvoeren?</p>
+            <input type="password" id="pinInput" placeholder="Voer pincode in" maxlength="6">
+            <div class="popup-buttons">
+              <button id="confirmPin">Bevestigen</button>
+              <button id="cancelPin">Annuleren</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
     <div id="container">
+        
         <header>
-            <img src="logo-Wilhelmina.jpg" alt="Wilhelmina Tap" id="headerLogo" width="250" height="100">
+          <img src="" alt="TapInlogo" id="headerLogo" width="250" height="100"/>
         </header>
         
-
         <nav>
             <div class="nav-buttons">
                 <button id="adminButton">👨‍🔧Admin Paneel</button>
                 <button id="statisticsButton">📉Statistieken</button>
+                <button id="toggle-theme" class="theme-toggle" aria-pressed="false" aria-label="Schakel dag/nacht">
+                  <span class="icon sun">☀️</span>
+                  <span class="icon moon">🌙</span>
 
             </div>
         </nav>
 
-
+        <div id="notificationPopup"><span id="notificationMessage"></span></div>
 
         <main>
             <section id="ledenLijst">
                 <h2>Ledenlijst</h2>
-                <ul id="ledenUl"></ul>
-                <div id="totaalBedrag"></div> 
-            </section>
+              
+                <!-- Nieuwe container -->
+                <div class="list-container">
+                  <ul id="ledenUl"></ul>
+              </section>
 
-            <section id="drankjesLijst" style="display: none;">
+              <section id="drankjesLijst" style="display: none;">
                 <button id="backToLeden">↩️Ledenlijst</button>
+                <div class="list-container drinks-container">
                 <h2>Bar Lijst van <span id="currentMemberName"></span></h2>
-                <ul id="drankjesUl"></ul>
-                <div id="drankjesDetails"></div>
-                <p id="totalAmount">Totaal: €0.00</p>
-
-                <button id="confirmOrder">Betaald</button>
-            </section>
+              
+                  <ul id="drankjesUl"></ul>
+                  <div id="drankjesDetails" class="drinks-grid"></div>
+              
+                  <div class="drinks-footer">
+                    <p id="totalAmount">Totaal: €0.00</p>
+                    <div class="footer-buttons">
+                      <!--<button id="clearBill" class="reset-button" type="button">Rekening legen</button>-->
+                      <button id="confirmOrder" type="button">Betaald</button>
+                    </div>
+                  </div>
+              </section>
                 <!-- Footer toegevoegd -->
     <footer>
-        <p>&copy; 2025 Wilhelmina Leens. Alle rechten voorbehouden.</p>
-        <p>Ontwikkeld door Mark Steenhuis & Jurre Straatsma.</p>
+        <p>&copy; 2025 TapIn. Alle rechten voorbehouden.</p>
+        <p>Ontwikkeld door Mark Steenhuis</p>
     </footer>
         </main>
     </div>
     
-    
+    <script src="shared.js"></script>
     <script src="index.js"></script>
-    <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/WilhelminaBar/service-worker.js')
-      .then(() => console.log('✅ Service worker geregistreerd!'))
-      .catch(err => console.error('❌ Fout bij service worker:', err));
-  }
-</script>
 
 </body>
 </html>
