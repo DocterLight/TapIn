@@ -42,6 +42,7 @@
     <!-- Navigation -->
     <nav>
       <div class="nav-buttons">
+        <button id="admin-footer" type="button" disabled></button>
         <button id="backButton" type="button">↩️ Ledenlijst</button>
         <button id="adminButton" type="button">👨‍🔧 Admin Paneel</button>
         <button id="toggle-theme" class="theme-toggle" aria-pressed="false" aria-label="Schakel dag/nacht">
@@ -81,6 +82,7 @@
 
     <!-- Footer -->
     <footer>
+      <div id="admin-footer"></div>
       <p>&copy; 2025 TapIn. Alle rechten voorbehouden.</p>
       <p>Ontwikkeld door Mark Steenhuis</p>
       <button id="installButton" style="display:none;">📲 App installeren</button>
@@ -98,6 +100,7 @@
       const backButton = document.getElementById('backButton');
       const adminButton = document.getElementById('adminButton');
       const resetBtn   = document.getElementById('resetAllButton');
+      
 
       const resetPopup = document.getElementById('resetPopup');
       const confirmResetButton = document.getElementById('confirmResetButton');

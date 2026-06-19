@@ -1,3 +1,5 @@
+let pendingDrinkRemoval = null;
+let pinAction = null;
 document.addEventListener('DOMContentLoaded', () => {
   // --- Service Worker ---
   if ('serviceWorker' in navigator) {
@@ -6,6 +8,52 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(reg => console.log('Service Worker geregistreerd met scope:', reg.scope))
         .catch(err => console.log('Service Worker registratie mislukt:', err));
     });
+  }
+
+  const GLOBAL_LIMIT = 25; // bedrag limiet
+
+  function evaluateMemberStatus(member) {
+    if (member.exempt) {
+      member.isBlocked = false;
+      return member;
+    }
+  
+    member.isBlocked = (member.totalAmount || 0) >= GLOBAL_LIMIT;
+    return member;
+  }
+
+  const notificationQueue = {};
+
+  function batchNotify(key, messageBuilder, delay = 800) {
+    if (!notificationQueue[key]) {
+      notificationQueue[key] = {
+        count: 0,
+        timeout: null,
+        data: null
+      };
+    }
+  
+    const item = notificationQueue[key];
+    item.count++;
+  
+    clearTimeout(item.timeout);
+  
+    item.timeout = setTimeout(() => {
+      const msg = messageBuilder(item.count);
+      notify(msg);
+      delete notificationQueue[key];
+    }, delay);
+  }
+
+  function safeAddLog(entry) {
+    const logs = JSON.parse(localStorage.getItem("logs")) || [];
+  
+    logs.push({
+      ...entry,
+      timestamp: Date.now()
+    });
+  
+    localStorage.setItem("logs", JSON.stringify(logs));
   }
 
   // --- Elements ---
@@ -27,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const closeModalButton = document.getElementById('closeModal');
 
   const headerLogo = document.getElementById('headerLogo');
+  
 
   // --- Notificatie helper (shared popup als beschikbaar) ---
   function notify(message) {
@@ -235,27 +284,59 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Drankje toevoegen ---
   window.addDrinkToBill = function (drinkName, drinkAmount) {
+
     const leden = JSON.parse(localStorage.getItem('leden')) || [];
     const memberName = currentMemberNameSpan.textContent;
     const idx = leden.findIndex(m => m.name === memberName);
     if (idx === -1) return;
-
+  
     const member = leden[idx];
-    member.totalAmount = Number(member.totalAmount || 0) + Number(drinkAmount || 0);
-    if (!Array.isArray(member.drinks)) member.drinks = [];
-    member.drinks.push({ name: drinkName, amount: Number(drinkAmount || 0) });
+  
+    // 🔴 CHECK FIRST (belangrijk!)
+    evaluateMemberStatus(member);
+  
+    if (member.isBlocked) {
+      notify(`⛔ ${member.name} is geblokkeerd limiet €${GLOBAL_LIMIT} bereikt`);
+      return;
+    }
 
+    const drinkObj = {
+      name: drinkName,
+      amount: Number(drinkAmount || 0)
+    };
+  
+    // 👉 pas hierna toevoegen
+    member.totalAmount = Number(member.totalAmount || 0) + Number(drinkAmount || 0);
+
+    if (!Array.isArray(member.drinks)) member.drinks = [];
+
+    member.drinks.push(drinkObj);
+    
     leden[idx] = member;
     localStorage.setItem('leden', JSON.stringify(leden));
-
+    
+    // 🔥 LOGBOEK TOEVOEGEN (HIER!)
+    safeAddLog({
+      type: "drankje_toegevoegd",
+      member: member.name,
+      drink: drinkObj.name,   // 👈 alleen string
+      amount: drinkObj.amount, // 👈 apart veld
+      message: `${drinkObj.name} toegevoegd aan ${member.name}`
+    });
+    
     updateHistoricalStats(member.name, drinkName, Number(drinkAmount || 0));
-    notify(`+1 ${drinkName} toegevoegd aan rekening van ${member.name}`);
-
-    // UI live bijwerken
+    
+    batchNotify(
+      `add-${member.name}-${drinkName}`,
+      (count) => `+${count} ${drinkName} toegevoegd aan rekening van ${member.name}`
+    );
+    
     loadDrankjesDetails(member.name);
     updateTotalAmount(member.name);
     sessionStorage.setItem('lastSelectedMember', member.name);
-  };
+  
+    localStorage.setItem("logs", JSON.stringify(logs));
+  }
 
   // --- Drankje verwijderen ---
   window.removeDrinkFromBill = function (drinkName, drinkAmount) {
@@ -263,24 +344,47 @@ document.addEventListener('DOMContentLoaded', () => {
     const memberName = currentMemberNameSpan.textContent;
     const idx = leden.findIndex(m => m.name === memberName);
     if (idx === -1) return;
-
+  
     const member = leden[idx];
     if (!Array.isArray(member.drinks) || member.drinks.length === 0) return;
-
-    // Zoek het eerste drankje dat overeenkomt en verwijder het
-    const drinkIndex = member.drinks.findIndex(d => d.name === drinkName && d.amount === drinkAmount);
-    if (drinkIndex !== -1) {
-      member.drinks.splice(drinkIndex, 1);
-      member.totalAmount = Math.max(0, Number(member.totalAmount || 0) - Number(drinkAmount || 0));
-    }
-
+  
+    // 🔥 normaliseer (voorkomt match bugs)
+    const targetAmount = Number(drinkAmount);
+  
+    const drinkIndex = member.drinks.findIndex(d =>
+      d.name === drinkName &&
+      Number(d.amount) === targetAmount
+    );
+  
+    if (drinkIndex === -1) return;
+  
+    member.drinks.splice(drinkIndex, 1);
+    member.totalAmount = Math.max(
+      0,
+      Number(member.totalAmount || 0) - targetAmount
+    );
+  
     leden[idx] = member;
     localStorage.setItem('leden', JSON.stringify(leden));
-
-    // UI updaten
+  
+    // UI
     loadDrankjesDetails(member.name);
     updateTotalAmount(member.name);
-    notify(`-1 ${drinkName} verwijderd van ${member.name} zijn rekening`);
+  
+    // 🔥 CLEAN LOG (belangrijk voor filters)
+    safeAddLog({
+      type: "drankje_verwijderd",
+      member: member.name,
+      drink: drinkName,              // 👈 string
+      amount: Number(drinkAmount),   // 👈 nummer
+      message: `${drinkName} verwijderd van ${member.name}`
+    });
+    
+  
+    batchNotify(
+      `remove-${member.name}-${drinkName}`,
+      (count) => `-${count} ${drinkName} verwijderd van ${member.name} zijn rekening`
+    );
   };
 
 
@@ -329,11 +433,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Terugknop ---
   if (backToLedenButton) {
     backToLedenButton.addEventListener('click', () => {
-      backToLeden(); 
+      backToLeden();
       location.reload(); // zorgt voor refresh
     });
-  }  
-  
+  }
 
   // --- Init ---
   loadLedenList();

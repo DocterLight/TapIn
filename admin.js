@@ -8,6 +8,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+
+  function addLog(entry) {
+    const logs = JSON.parse(localStorage.getItem("logs")) || [];
+
+    logs.push({
+      ...entry,
+      timestamp: Date.now()
+    });
+
+    localStorage.setItem("logs", JSON.stringify(logs));
+  }
+
   // === Elementen ophalen ===
   const backButton = document.getElementById('backButton');
   const statisticsButton = document.getElementById('statisticsButton');
@@ -23,6 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const drankjesToRemove = document.getElementById('drankjesToRemove');
 
   const enableFixedLogoBtn = document.getElementById('enable-fixed-logo');
+
+  document.getElementById("logFilter")?.addEventListener("change", loadLogboek);
 
 
   // 🎯 Pincode popup: support zowel #pinPopup als #pincodePopup (bestaande HTML)
@@ -73,11 +87,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateLogo() {
     const headerLogo = document.getElementById('headerLogo');
     if (!headerLogo) return;
-  
+
     const fixedLogoEnabled = localStorage.getItem('fixedLogoEnabled') === 'true';
     const customLogo = localStorage.getItem('customLogo');
     const customLogoEnabled = localStorage.getItem('customLogoEnabled') === 'true';
-  
+
     if (fixedLogoEnabled) {
       headerLogo.src = 'logo-Custom.jpg';
       return;
@@ -133,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function validatePincode() {
     const storedPin = localStorage.getItem('pinCode') || DEFAULT_PIN;
     const inputPin = (popupPincodeInput?.value || '').trim();
-  
+
     if (actionContext === 'delete') {
       if (inputPin === storedPin) {
         if (currentType === 'lid') removeLid(currentName);
@@ -146,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       return;
     }
-  
+
     if (actionContext === 'change') {
       if (inputPin === storedPin) {
         localStorage.setItem('pinCode', pendingNewPin);
@@ -161,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
   }
-  
+
 
   function openPinPopup(title = 'Pincode') {
     if (!pinModal) {
@@ -253,18 +267,33 @@ document.addEventListener('DOMContentLoaded', () => {
   function loadLedenToRemove() {
     if (!ledenToRemove) return;
     ledenToRemove.innerHTML = '';
+
     const leden = JSON.parse(localStorage.getItem('leden')) || [];
+
     leden.forEach(member => {
       const li = document.createElement('li');
-      li.innerHTML = `${member.name} <button onclick="promptForPincode('lid', '${member.name.replace(/'/g, "\\'")}')">Verwijder</button>`;
+      li.innerHTML = `
+        ${member.name}
+        <button onclick="promptForPincode('lid', '${member.name.replace(/'/g, "\\'")}')">
+          Verwijder
+        </button>
+      `;
       ledenToRemove.appendChild(li);
     });
   }
 
   function removeLid(name) {
     let leden = JSON.parse(localStorage.getItem('leden')) || [];
+
     leden = leden.filter(member => member.name !== name);
+
     localStorage.setItem('leden', JSON.stringify(leden));
+
+    addLog({
+      type: "lid_verwijderd",
+      name
+    });
+
     loadLedenToRemove();
   }
 
@@ -333,7 +362,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // === Events voor formulieren en navigatie ===
   if (backButton) backButton.addEventListener('click', () => window.location.href = 'index.html');
   if (statisticsButton) statisticsButton.addEventListener('click', () => window.location.href = 'statistics.html');
-
   if (addMemberForm) {
     addMemberForm.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -341,6 +369,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (memberName) {
         const leden = JSON.parse(localStorage.getItem('leden')) || [];
         leden.push({ name: memberName, amount: 0 });
+
+        addLog({
+          type: "lid_toegevoegd",
+          name: memberName
+        });
         localStorage.setItem('leden', JSON.stringify(leden));
         if (memberNameInput) memberNameInput.value = '';
         loadLedenToRemove();
@@ -351,18 +384,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+
   if (addDrinkForm) {
     addDrinkForm.addEventListener('submit', (e) => {
       e.preventDefault();
+
       const drinkName = (drinkNameInput?.value || '').trim();
       const amountText = (drinkAmountInput?.value || '').trim();
       const drinkAmount = parseFloat(amountText);
+
       if (drinkName && !isNaN(drinkAmount) && drinkAmount >= 0) {
         const drankjes = JSON.parse(localStorage.getItem('drankjes')) || [];
+
         drankjes.push({ name: drinkName, amount: drinkAmount });
         localStorage.setItem('drankjes', JSON.stringify(drankjes));
+
+        // 🆕 LOGBOEK REGEL
+        addLog({
+          type: "drink_added",
+          name: drinkName,
+          amount: drinkAmount
+        });
+
         if (drinkNameInput) drinkNameInput.value = '';
         if (drinkAmountInput) drinkAmountInput.value = '';
+
         loadDrankjesToRemove();
         showNotification('Nieuw drankje toegevoegd!');
       } else {
@@ -374,13 +420,31 @@ document.addEventListener('DOMContentLoaded', () => {
   // === Subtabs ===
   document.querySelectorAll('.sub-tab').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.sub-tab').forEach(b => b.classList.remove('active'));
+
+      document.querySelectorAll('.sub-tab').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+
       btn.classList.add('active');
-      document.querySelectorAll('.sub-tab-content').forEach(c => c.classList.remove('active'));
+      btn.setAttribute('aria-selected', 'true');
+
+      document.querySelectorAll('.sub-tab-content').forEach(c => {
+        c.classList.remove('active');
+      });
+
       const target = document.getElementById(btn.dataset.tab);
       if (target) target.classList.add('active');
+
+      // 🔥 BELANGRIJK: whitelist tab hook
+      if (btn.dataset.tab === 'whitelist') {
+        loadAdminDashboard();
+      }
+
     });
   });
+
+
 
   // === Layout: helper om file in te lezen ===
   function handleFileUpload(input, onLoad) {
@@ -448,7 +512,7 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.removeItem('darkMode'); // ← 'w' weggehaald
     localStorage.removeItem('fixedLogoEnabled');
     localStorage.removeItem('customLogoEnabled');
-  
+
     const headerLogo = document.getElementById('headerLogo');
     if (headerLogo) headerLogo.src = 'logo-light.png';
     if (previewLogo) {
@@ -531,28 +595,207 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })();
 
+  window.toggleWhitelist = function (index) {
+    const leden = JSON.parse(localStorage.getItem('leden')) || [];
+
+    const member = leden[index];
+
+    // nieuwe status bepalen
+    const newStatus = !member.exempt;
+    member.exempt = newStatus;
+
+    localStorage.setItem('leden', JSON.stringify(leden));
+
+    addLog({
+      type: "whitelist",
+      member: member.name,
+      action: "toegevoegd aan whitelist"
+    });
+
+    loadAdminDashboard();
+  };
+  
+
   // === Startlijsten ===
   loadLedenToRemove();
   loadDrankjesToRemove();
+  function loadAdminDashboard() {
+    const leden = JSON.parse(localStorage.getItem('leden')) || [];
+    const container = document.getElementById('adminList');
+
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    leden.forEach((member, index) => {
+
+      const isWhitelisted = member.exempt === true;
+
+      const statusClass = isWhitelisted
+        ? "status-whitelist"
+        : "status-limited";
+
+      const statusIcon = isWhitelisted ? "🟢🔓" : "🟡🔒";
+
+      const statusText = isWhitelisted
+        ? "WHITELIST"
+        : "LIMIET ACTIEF";
+
+      const card = document.createElement('div');
+      card.className = 'admin-card';
+
+      card.innerHTML = `
+        <div style="display:flex;justify-content:space-between;">
+          <strong>${member.name}</strong>
+          <span class="${statusClass}">
+  ${statusIcon} ${statusText}
+</span>
+        </div>
+  
+        <label style="display:block;margin-top:10px;">
+          <input type="checkbox" ${member.exempt ? "checked" : ""}
+            onchange="toggleWhitelist(${index})">
+          Whitelist (onbeperkt)
+        </label>
+  
+        <div style="margin-top:8px;">
+          €${Number(member.totalAmount || 0).toFixed(2)}
+        </div>
+      `;
+
+      container.appendChild(card);
+    });
+  }
 });
 
-// === PWA install button ===
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  const btn = document.getElementById('installButton');
-  if (btn) btn.style.display = 'block';
+function loadLogboek() {
+  const logList = document.getElementById("logList");
+  if (!logList) return;
+
+  const filter = window.currentLogFilter || "all";
+  const logs = JSON.parse(localStorage.getItem("logs")) || [];
+
+  logList.innerHTML = "";
+
+  const filtered = logs.slice().reverse().filter(log => {
+    if (filter === "all") return true;
+
+    if (filter === "lid") {
+      return log.type.includes("lid");
+    }
+
+    if (filter === "drankje") {
+      return log.type.includes("drankje");
+    }
+
+    if (filter === "whitelist") {
+      return log.type.includes("whitelist");
+    }
+
+    return true;
+  });
+
+  filtered.forEach(log => {
+    const li = document.createElement("li");
+    li.className = "log-item";
+
+    const date = new Date(log.timestamp);
+    const time = date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+
+    const iconMap = {
+      lid_toegevoegd: "➕👤",
+      lid_verwijderd: "❌👤",
+      drankje_toegevoegd: "➕🍺",
+      drankje_verwijderd: "❌🍺",
+      whitelist_ingeschakeld: "🟢🔓",
+      whitelist_uitgeschakeld: "🔴🔒"
+    };
+    
+    const memberName =
+      log.member ||
+      log.name ||
+      log.user ||
+      "Onbekend";
+    
+      const drinkText =
+      log.type === "drankje_verwijderd"
+        ? `Er is <b>${log.drink}</b> verwijderd bij`
+        : log.type === "drankje_toegevoegd"
+        ? `Er is een <b>${log.drink} </b> toegevoegd bij`
+        : log.action || "";
+    
+    li.innerHTML = `
+      <span class="log-time">${time}</span>
+      <span class="log-icon">${iconMap[log.type] || "📌"}</span>
+      <span class="log-text">
+        ${drinkText}
+        <b> ${memberName}</b>
+        ${log.amount ? `(€${log.amount})` : ""}
+      </span>
+    `;
+    
+    logList.appendChild(li);
+  });
+}
+
+document.querySelectorAll('.sub-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+
+    document.querySelectorAll('.sub-tab').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-selected', 'false');
+    });
+
+    btn.classList.add('active');
+    btn.setAttribute('aria-selected', 'true');
+
+    document.querySelectorAll('.sub-tab-content').forEach(c => {
+      c.classList.remove('active');
+    });
+
+    const target = document.getElementById(btn.dataset.tab);
+    if (target) target.classList.add('active');
+
+    // 👇 BELANGRIJK
+    if (btn.dataset.tab === 'whitelist') loadAdminDashboard();
+    if (btn.dataset.tab === 'logboek') {
+      window.currentLogFilter = "all"; // optioneel reset
+      loadLogboek();
+    }
+
+  });
 });
-const installBtn = document.getElementById('installButton');
-if (installBtn) {
-  installBtn.addEventListener('click', () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.finally(() => {
-        deferredPrompt = null;
-        installBtn.style.display = 'block';
-      });
+
+const clearLogsBtn = document.getElementById("clearLogsBtn");
+
+if (clearLogsBtn) {
+  clearLogsBtn.addEventListener("click", () => {
+    if (confirm("Weet je zeker dat je het logboek wilt wissen?")) {
+      localStorage.removeItem("logs");
+      loadLogboek();
+      showNotification("Logboek gewist!");
     }
   });
 }
+
+
+const filterBtn = document.getElementById("logFilterBtn");
+const filterMenu = document.getElementById("logFilterMenu");
+
+filterBtn?.addEventListener("click", () => {
+  filterMenu.classList.toggle("hidden");
+});
+
+filterMenu?.addEventListener("click", (e) => {
+  const btn = e.target.closest("button");
+  if (!btn) return;
+
+  window.currentLogFilter = btn.dataset.filter || "all";
+
+  filterMenu.classList.add("hidden");
+
+  loadLogboek(); // 🔥 DIT MIS JE NU
+});

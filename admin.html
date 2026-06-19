@@ -21,6 +21,8 @@
     </div>
   </div>
 
+  
+
   <!-- Pincode popup (centreren + animaties) -->
   <div id="pinPopup" class="popup" role="dialog" aria-modal="true" aria-labelledby="pinPopupTitle"
     aria-describedby="pinPopupDesc">
@@ -70,12 +72,17 @@
         <div class="sub-tabs" role="tablist" aria-label="Beheer tabs">
           <button class="sub-tab active" role="tab" aria-selected="true" aria-controls="leden"
             data-tab="leden">Leden</button>
+          <button class="sub-tab" role="tab" aria-selected="false" aria-controls="whitelist"
+            data-tab="whitelist">Whitelist</button>
           <button class="sub-tab" role="tab" aria-selected="false" aria-controls="drankjes"
             data-tab="drankjes">Drankjes</button>
           <button class="sub-tab" role="tab" aria-selected="false" aria-controls="layout" data-tab="layout">Logo &amp;
             Achtergrond</button>
           <button class="sub-tab" role="tab" aria-selected="false" aria-controls="pincode"
             data-tab="pincode">Pincode</button>
+            <button class="sub-tab" role="tab" aria-selected="false" data-tab="logboek">
+              Logboek
+            </button>
         </div>
 
         <!-- === Leden tab === -->
@@ -150,6 +157,47 @@
           </div>
         </div>
       </section>
+
+<!-- === Whitelist tab-->
+<div class="sub-tab-content" id="whitelist" role="tabpanel" aria-hidden="true">
+
+  <div class="list-section">
+    <h2>Whitelist</h2>
+
+    <ul id="adminList"></ul>
+
+  </div>
+
+</div>
+        
+<div class="sub-tab-content" id="logboek" role="tabpanel" aria-hidden="true">
+  
+  
+  <div class="list-section">
+
+    <div class="log-header">
+      <div class="log-filter">
+        <button id="logFilterBtn" class="filter-btn">⚙️ Filter</button>
+    
+        <div id="logFilterMenu" class="filter-menu hidden">
+          <button data-filter="all">Alles</button>
+          <button data-filter="lid">Leden</button>
+          <button data-filter="drankje">Drankjes</button>
+          <button data-filter="whitelist">Whitelist</button>
+        </div>
+      </div>
+    </div>
+
+    <h2>📜 Logboek</h2>
+    <ul id="logList"></ul>
+  </div>
+
+  <div style="margin-top:10px;">
+    <button id="clearLogsBtn" type="button" class="reset-button">
+      Logboek wissen
+    </button>
+  </div>
+</div>
 
       <footer>
         <p>&copy; 2025 TapIn. Alle rechten voorbehouden.</p>

@@ -129,3 +129,45 @@
   
   /* ===== Footer (kleur via shared.css; hier niets overschrijven) ===== */
   
+  #admin-footer {
+    margin-left: auto;
+  
+    border: 2px solid var(--border);
+    border-left: 5px solid var(--border-accent);
+
+
+  
+    font-weight: 600;
+    font-size: 14px;
+  
+    box-shadow: 0 4px 12px var(--shadow);
+  
+    cursor: default;
+    pointer-events: none; /* 👈 maakt hem echt niet klikbaar */
+  
+    transition: all 0.3s ease;
+  }
+
+
+  .footer-total {
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  box-shadow: 0 4px 12px var(--shadow);
+}
+
+/* kleuren */
+.green strong {
+  color: #60ff9b;
+  animation: pulse-green 1.5s infinite;
+}
+
+.orange strong {
+  color: #ffbe4f;
+  animation: pulse-orange 1.2s infinite;
+}
+
+.red strong {
+  color: #ff6868;
+  animation: pulse-red 1s infinite;
+}

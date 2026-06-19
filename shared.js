@@ -62,32 +62,3 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     })();
   });
-  
-  // Service Worker + PWA
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(reg => console.log('Service Worker geregistreerd:', reg.scope))
-        .catch(err => console.log('Service Worker registratie mislukt:', err));
-    });
-  }
-  
-  let deferredPrompt;
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    const btn = document.getElementById('installButton');
-    if (btn) btn.style.display = 'block';
-  });
-  const installBtn = document.getElementById('installButton');
-  if (installBtn) {
-    installBtn.addEventListener('click', () => {
-      if (!deferredPrompt) return;
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.finally(() => {
-        deferredPrompt = null;
-        installBtn.style.display = 'block';
-      });
-    });
-  }
-  

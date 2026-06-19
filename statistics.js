@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 300);
       });
     }
-  
+
     // --- Stats berekenen / renderen ---
     function calculateStatistics() {
       const leden = JSON.parse(localStorage.getItem("leden")) || [];
@@ -130,8 +130,43 @@ document.addEventListener("DOMContentLoaded", () => {
           .join("");
       }
     }
-  
+
+    function calculateTotalOpenstaand(members) {
+      return members.reduce((total, member) => {
+        if (member.exempt === true) return total; // 👈 whitelist uitsluiten
+    
+        return total + (Number(member.totalAmount) || 0);
+      }, 0);
+    }
+
+    function startOpenstaandLiveTimer() {
+      const footer = document.getElementById("admin-footer");
+      if (!footer) return;
+    
+      setInterval(() => {
+        const members = JSON.parse(localStorage.getItem("leden")) || [];
+    
+        const total = calculateTotalOpenstaand(members);
+        const color = getAmountColor(total);
+    
+        footer.innerHTML = `
+          <div class="footer-total ${color}">
+            Totaal openstaand 💰 <strong>€${total.toFixed(2)}</strong>
+          </div>
+        `;
+      }, 1000);
+    }
+    
+    function getAmountColor(total) {
+      if (total >= 250) return "red";
+      if (total >= 100) return "orange";
+      return "green";
+    }
+    
+    
     // Eerste render
     calculateStatistics();
+    startOpenstaandLiveTimer();
   });
+  
   
