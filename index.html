@@ -1,4 +1,5 @@
-<html lang="en">
+<!doctype html>
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -6,11 +7,36 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <title>TapIn - Homepage</title>
-    <link rel="stylesheet" href="css/shared.css">
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="assets/css/shared.css">
+    <link rel="stylesheet" href="assets/css/index.css">
 </head>
 <body>
-    <!-- Payment confirmation modal -->
+    <section id="loginScreen" class="login-screen" aria-labelledby="loginTitle">
+      <div class="login-card">
+        <h1 id="loginTitle">Inloggen bij TapIn</h1>
+        <p>Voer je persoonlijke inlog-ID in.</p>
+        <form id="loginForm" autocomplete="off">
+          <input id="loginIdInput" type="text" placeholder="Inlog-ID" autocapitalize="characters" required />
+          <button type="submit">Inloggen</button>
+        </form>
+        <p id="loginError" class="login-error" role="alert" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section id="registrationScreen" class="login-screen hidden" aria-labelledby="registrationTitle">
+      <div class="login-card">
+        <h1 id="registrationTitle">TapIn registreren</h1>
+        <p>Maak de eerste beheerder aan en stel direct een pincode in.</p>
+        <form id="registrationForm" class="registration-form" autocomplete="off">
+          <input id="registrationNameInput" type="text" placeholder="Voor- en achternaam" autocomplete="name" required />
+          <input id="registrationPinInput" type="password" placeholder="Pincode (minimaal 4 cijfers)" inputmode="numeric" maxlength="6" required />
+          <input id="registrationPinConfirmInput" type="password" placeholder="Herhaal pincode" inputmode="numeric" maxlength="6" required />
+          <button type="submit">Registreren</button>
+        </form>
+        <p id="registrationError" class="login-error" role="alert" aria-live="polite"></p>
+      </div>
+    </section>
+
     <div id="confirmationModal" class="modal">
         <div class="modal-content">
             <h2>Betaling bevestigen</h2>
@@ -20,32 +46,36 @@
         </div>
     </div>
 
-    <!-- PIN popup -->
-    <div id="pinPopup" class="popup" role="dialog" aria-modal="true">
-        <div class="popup-content">
+        <!-- === Pincode tab === -->
+        <div id="pinPopup" class="popup" role="dialog" aria-modal="true">
+          <div class="popup-content">
             <h2>Rekening Legen</h2>
             <p>Weet je zeker dat je deze wijziging wilt doorvoeren?</p>
             <input type="password" id="pinInput" placeholder="Voer pincode in" maxlength="6">
             <div class="popup-buttons">
-                <button id="confirmPin">Bevestigen</button>
-                <button id="cancelPin">Annuleren</button>
+              <button id="confirmPin">Bevestigen</button>
+              <button id="cancelPin">Annuleren</button>
             </div>
+          </div>
         </div>
-    </div>
+      </section>
 
-    <div id="container">
+    <div id="container" class="app-locked" aria-hidden="true">
+        
         <header>
-            <img src="" alt="TapIn logo" id="headerLogo" width="250" height="100"/>
+          <img src="" alt="TapInlogo" id="headerLogo" width="250" height="100"/>
         </header>
-
+        
         <nav>
             <div class="nav-buttons">
-                <button id="adminButton">👨‍🔧 Admin Paneel</button>
-                <button id="statisticsButton">📉 Statistieken</button>
+                <button id="adminButton">👨‍🔧Admin Paneel</button>
+                <button id="statisticsButton">📉Statistieken</button>
+                <span id="sessionUser" class="session-user"></span>
+                <button id="logoutButton" type="button">Uitloggen</button>
                 <button id="toggle-theme" class="theme-toggle" aria-pressed="false" aria-label="Schakel dag/nacht">
-                    <span class="icon sun">☀️</span>
-                    <span class="icon moon">🌙</span>
-                </button>
+                  <span class="icon sun">☀️</span>
+                  <span class="icon moon">🌙</span>
+
             </div>
         </nav>
 
@@ -54,35 +84,56 @@
         <main>
             <section id="ledenLijst">
                 <h2>Ledenlijst</h2>
+              
+                <!-- Nieuwe container -->
                 <div class="list-container">
-                    <ul id="ledenUl"></ul>
-                </div>
-            </section>
-
-            <section id="drankjesLijst" style="display: none;">
-                <button id="backToLeden">↩️ Ledenlijst</button>
-                <div class="list-container drinks-container">
-                    <h2>Bar Lijst van <span id="currentMemberName"></span></h2>
-                    <ul id="drankjesUl"></ul>
-                    <div id="drankjesDetails" class="drinks-grid"></div>
-                    <div class="drinks-footer">
-                        <p id="totalAmount">Totaal: €0.00</p>
-                        <div class="footer-buttons">
-                            <!--<button id="clearBill" class="reset-button" type="button">Rekening legen</button>-->
-                            <button id="confirmOrder" type="button">Betaald</button>
-                        </div>
+                  <div class="member-list-toolbar">
+                    <div class="member-filter">
+                      <button id="memberFilterButton" type="button" aria-label="Filter openen" title="Filter"
+                        aria-expanded="false" aria-controls="memberFilterMenu">▾</button>
+                      <div id="memberFilterMenu" class="member-filter-menu hidden">
+                        <label>
+                          <input id="favoriteFilterCheckbox" type="checkbox" />
+                          <span>⭐ Alleen favorieten</span>
+                        </label>
+                        <label>
+                          <input id="nicknamesCheckbox" type="checkbox" checked />
+                          <span>🏷️ Bijnamen tonen</span>
+                        </label>
+                      </div>
                     </div>
+                  </div>
+                  <ul id="ledenUl"></ul>
+                  <p id="noFavoriteMembers" class="empty-members-message" hidden>Er zijn nog geen favoriete leden.</p>
                 </div>
-            </section>
+              </section>
+
+              <section id="drankjesLijst" style="display: none;">
+                <button id="backToLeden">↩️Ledenlijst</button>
+                <div class="list-container drinks-container">
+                <h2>Bar Lijst van <span id="currentMemberName"></span></h2>
+              
+                  <ul id="drankjesUl"></ul>
+                  <div id="drankjesDetails" class="drinks-grid"></div>
+              
+                  <div class="drinks-footer">
+                    <p id="totalAmount">Totaal: €0.00</p>
+                    <div class="footer-buttons">
+                      <!--<button id="clearBill" class="reset-button" type="button">Rekening legen</button>-->
+                      <button id="confirmOrder" type="button">Betaald</button>
+                    </div>
+                  </div>
+              </section>
+                <!-- Footer toegevoegd -->
+    <footer>
+        <p>&copy; 2025 TapIn. Alle rechten voorbehouden.</p>
+        <p>Ontwikkeld door Mark Steenhuis</p>
+    </footer>
         </main>
-
-        <footer>
-            <p>&copy; 2025 TapIn. Alle rechten voorbehouden.</p>
-            <p>Ontwikkeld door Mark Steenhuis</p>
-        </footer>
     </div>
+    
+    <script src="assets/js/shared.js"></script>
+    <script src="assets/js/index.js"></script>
 
-    <script src="js/shared.js"></script>
-    <script src="js/index.js"></script>
 </body>
 </html>

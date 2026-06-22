@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="nl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TapIn - AdminPaneel</title>
+  <link rel="stylesheet" href="assets/css/shared.css">
+  <link rel="stylesheet" href="assets/css/admin.css" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0078d7" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+</head>
+
+<body>
+  <!-- Notificatie popup (compact, geen overlay) -->
+  <div id="notificationPopup" role="status" aria-live="polite">
+    <div class="popup-content">
+      <p id="notificationMessage"></p>
+    </div>
+  </div>
+
+  
+
+  <!-- Pincode popup (centreren + animaties) -->
+  <div id="pinPopup" class="popup" role="dialog" aria-modal="true" aria-labelledby="pinPopupTitle"
+    aria-describedby="pinPopupDesc">
+    <div class="popup-content">
+      <h2 id="pinPopupTitle">Voer pincode in</h2>
+      <p id="pinPopupDesc" style="margin:0 0 8px 0;">Bevestig je actie met de huidige pincode.</p>
+      <input type="password" id="popupPincodeInput" inputmode="numeric" autocomplete="one-time-code"
+        placeholder="Pincode" />
+      <div class="popup-buttons" style="margin-top:12px; gap:10px; justify-content:flex-end;">
+        <button id="confirmPopupButton" type="button">Bevestigen</button>
+        <button id="cancelPopupButton" type="button">Annuleren</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bijnaam popup -->
+  <div id="nicknamePopup" class="popup" role="dialog" aria-modal="true"
+    aria-labelledby="nicknamePopupTitle" aria-describedby="nicknamePopupDesc">
+    <div class="popup-content">
+      <h2 id="nicknamePopupTitle">Bijnaam wijzigen</h2>
+      <p id="nicknamePopupDesc">Vul een bijnaam in, of maak het veld leeg om de bijnaam te verwijderen.</p>
+      <input type="text" id="nicknamePopupInput" placeholder="Bijnaam" autocomplete="off" />
+      <div class="popup-buttons" style="margin-top:12px; gap:10px; justify-content:flex-end;">
+        <button id="confirmNicknameButton" type="button">Opslaan</button>
+        <button id="cancelNicknameButton" type="button">Annuleren</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reset bevestiging popup -->
+  <div id="resetPopup" class="popup" role="dialog" aria-modal="true" aria-labelledby="resetPopupTitle">
+    <div class="popup-content">
+      <h2 id="resetPopupTitle">Weet je het zeker?</h2>
+      <p>Alles wordt teruggezet naar de standaard instellingen.</p>
+      <div class="popup-buttons" style="gap:10px; justify-content:flex-end;">
+        <button id="confirmResetButton" class="reset-button" type="button">Ja, reset</button>
+        <button id="cancelResetButton" type="button">Annuleren</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="container">
+    <header>
+      <img src="" alt="TapInlogo" id="headerLogo" width="250" height="100" />
+    </header>
+
+    <nav>
+      <div class="nav-buttons">
+        <button id="backButton" type="button">↩️ Ledenlijst</button>
+        <button id="statisticsButton" type="button">📉 Statistieken</button>
+        <button id="toggle-theme" class="theme-toggle" aria-pressed="false" aria-label="Schakel dag/nacht">
+          <span class="icon sun">☀️</span>
+          <span class="icon moon">🌙</span>
+        </button>
+      </div>
+    </nav>
+
+    <main>
+      <section id="adminPaneel">
+        <!-- === Sub-tabs === -->
+        <div class="sub-tabs" role="tablist" aria-label="Beheer tabs">
+          <button class="sub-tab active" role="tab" aria-selected="true" aria-controls="leden"
+            data-tab="leden">Leden</button>
+          <button class="sub-tab" role="tab" aria-selected="false" aria-controls="whitelist"
+            data-tab="whitelist">Whitelist</button>
+          <button class="sub-tab" role="tab" aria-selected="false" aria-controls="drankjes"
+            data-tab="drankjes">Drankjes</button>
+          <button class="sub-tab" role="tab" aria-selected="false" aria-controls="layout" data-tab="layout">Logo &amp;
+            Achtergrond</button>
+          <button class="sub-tab" role="tab" aria-selected="false" aria-controls="adminSettings"
+            data-tab="adminSettings">Admin</button>
+            <button class="sub-tab" role="tab" aria-selected="false" data-tab="logboek">
+              Logboek
+            </button>
+        </div>
+
+        <!-- === Leden tab === -->
+        <div class="sub-tab-content active" id="leden" role="tabpanel">
+          <div class="form-section">
+            <h2>Voeg lid toe</h2>
+            <form id="addMemberForm" autocomplete="off">
+              <input type="text" id="memberName" placeholder="Naam van lid" required />
+              <input type="text" id="memberNickname" placeholder="Bijnaam (optioneel)" />
+              <button type="submit">Voeg lid toe</button>
+            </form>
+          </div>
+          <div class="list-section">
+            <h2>Beheer leden</h2>
+            <ul id="ledenToRemove"></ul>
+          </div>
+        </div>
+
+        <!-- === Drankjes tab === -->
+        <div class="sub-tab-content" id="drankjes" role="tabpanel" aria-hidden="true">
+          <div class="form-section">
+            <h2>Voeg product toe</h2>
+            <form id="addDrinkForm" autocomplete="off">
+              <input type="text" id="drinkName" placeholder="Naam van product" required />
+              <input type="number" id="drinkAmount" placeholder="Kosten van product" step="0.01" min="0" required />
+              <button type="submit">Voeg product toe</button>
+            </form>
+          </div>
+          <div class="list-section">
+            <h2>Verwijder product</h2>
+            <ul id="drankjesToRemove"></ul>
+          </div>
+        </div>
+
+        <!-- === Layout tab === -->
+        <div class="sub-tab-content" id="layout" role="tabpanel" aria-hidden="true">
+          <div class="form-section">
+            <h2>Logo</h2>
+            <form id="logoForm">
+              <input type="file" id="logo-upload" accept="image/*" />
+            </form>
+          </div>
+
+          <div class="form-section">
+            <h2>Achtergrond</h2>
+            <form id="bgForm">
+              <input type="file" id="bg-upload" accept="image/*" />
+            </form>
+          </div>
+
+          <div class="form-section">
+            <h2>Layout acties</h2>
+            <div class="layout-actions">
+              <button id="save-layout" type="button">Opslaan</button>
+              <button id="toggle-preview" type="button">Preview aan/uit</button>
+              <button id="reset-layout" class="reset-button" type="button">Reset naar standaard</button>
+            </div>
+          </div>
+
+          <div id="fullscreen-preview" aria-hidden="true">
+            <img id="preview-logo" src="" alt="Logo preview" />
+          </div>
+        </div>
+
+        <!-- === Admin-instellingen tab === -->
+        <div class="sub-tab-content" id="adminSettings" role="tabpanel" aria-hidden="true">
+          <div class="form-section">
+            <h2>Pincode instellen</h2>
+            <form id="pinForm" class="pin-row" autocomplete="off">
+              <input type="password" id="pin-code" maxlength="6" inputmode="numeric" placeholder="Nieuwe pincode" />
+              <button id="save-pin" type="button">Pincode wijzigen</button>
+            </form>
+          </div>
+          <div class="form-section">
+            <h2>Bedraglimiet</h2>
+            <p>Deze limiet geldt voor alle leden die niet op de whitelist staan.</p>
+            <form id="globalLimitForm" class="limit-row" autocomplete="off">
+              <input type="number" id="globalLimitInput" min="0.01" step="0.01" required
+                aria-label="Bedraglimiet in euro" />
+              <button id="saveGlobalLimit" type="submit">Limiet wijzigen</button>
+            </form>
+          </div>
+          <div class="form-section">
+            <h2>Automatisch uitloggen</h2>
+            <p>Stel in na hoeveel minuten een sessie automatisch wordt afgesloten.</p>
+            <form id="sessionTimeoutForm" class="limit-row" autocomplete="off">
+              <input type="number" id="sessionTimeoutInput" min="1" max="1440" step="1" required
+                aria-label="Uitlogtijd in minuten" />
+              <button type="submit">Uitlogtijd wijzigen</button>
+            </form>
+          </div>
+          <div id="loginIdSection" class="list-section login-id-vault is-locked">
+            <h2>Inlog-ID's</h2>
+            <p>Deze ID's zijn gebaseerd op de echte naam van het lid.</p>
+            <div class="login-id-vault-content">
+              <ul id="loginIdList"></ul>
+            </div>
+            <div class="login-id-unlock-overlay">
+              <button id="unlockLoginIdsButton" type="button">Ontgrendel Inlog-ID's</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+<!-- === Whitelist tab-->
+<div class="sub-tab-content" id="whitelist" role="tabpanel" aria-hidden="true">
+
+  <div class="list-section">
+    <h2>Whitelist</h2>
+
+    <ul id="adminList"></ul>
+
+  </div>
+
+</div>
+        
+<div class="sub-tab-content" id="logboek" role="tabpanel" aria-hidden="true">
+  
+  
+  <div class="list-section">
+
+    <div class="log-header">
+      <div class="log-filter">
+        <button id="logFilterBtn" class="filter-btn">⚙️ Filter</button>
+    
+        <div id="logFilterMenu" class="filter-menu hidden">
+          <button data-filter="all">Alles</button>
+          <button data-filter="lid">Leden</button>
+          <button data-filter="drankje">Drankjes</button>
+          <button data-filter="whitelist">Whitelist</button>
+          <button data-filter="admin">Admin</button>
+        </div>
+      </div>
+    </div>
+
+    <h2>📜 Logboek</h2>
+    <ul id="logList"></ul>
+  </div>
+
+  <div style="margin-top:10px;">
+    <button id="clearLogsBtn" type="button" class="reset-button">
+      Logboek wissen
+    </button>
+  </div>
+</div>
+
+      <footer>
+        <p>&copy; 2025 TapIn. Alle rechten voorbehouden.</p>
+        <p>Ontwikkeld door Mark Steenhuis</p>
+        <button id="installButton" style="display:none;">📲 App installeren</button>
+      </footer>
+    </main>
+  </div>
+  <script src="assets/js/shared.js"></script>
+  <script src="assets/js/admin.js"></script>
+</body>
+
+</html>
