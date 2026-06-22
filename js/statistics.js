@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
     // --- Nav ---
     if (backButton) backButton.addEventListener("click", () => (location.href = "index.html"));
-    if (adminButton) adminButton.addEventListener("click", () => (location.href = "admin.html"));
+    if (adminButton) adminButton.addEventListener("click", () => (location.href = '/pages/admin.html'));
   
     // --- Helpers ---
     function notify(msg) {

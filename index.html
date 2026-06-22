@@ -2,15 +2,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-</script>
     <meta name="theme-color" content="#0078d7">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <title>TapIn - Homepage</title>
-    <link rel="stylesheet" href="shared.css">
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="css/shared.css">
+    <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
+    <!-- Payment confirmation modal -->
     <div id="confirmationModal" class="modal">
         <div class="modal-content">
             <h2>Betaling bevestigen</h2>
@@ -20,34 +20,32 @@
         </div>
     </div>
 
-        <!-- === Pincode tab === -->
-        <div id="pinPopup" class="popup" role="dialog" aria-modal="true">
-          <div class="popup-content">
+    <!-- PIN popup -->
+    <div id="pinPopup" class="popup" role="dialog" aria-modal="true">
+        <div class="popup-content">
             <h2>Rekening Legen</h2>
             <p>Weet je zeker dat je deze wijziging wilt doorvoeren?</p>
             <input type="password" id="pinInput" placeholder="Voer pincode in" maxlength="6">
             <div class="popup-buttons">
-              <button id="confirmPin">Bevestigen</button>
-              <button id="cancelPin">Annuleren</button>
+                <button id="confirmPin">Bevestigen</button>
+                <button id="cancelPin">Annuleren</button>
             </div>
-          </div>
         </div>
-      </section>
+    </div>
 
     <div id="container">
-        
         <header>
-          <img src="" alt="TapInlogo" id="headerLogo" width="250" height="100"/>
+            <img src="" alt="TapIn logo" id="headerLogo" width="250" height="100"/>
         </header>
-        
+
         <nav>
             <div class="nav-buttons">
-                <button id="adminButton">👨‍🔧Admin Paneel</button>
-                <button id="statisticsButton">📉Statistieken</button>
+                <button id="adminButton">👨‍🔧 Admin Paneel</button>
+                <button id="statisticsButton">📉 Statistieken</button>
                 <button id="toggle-theme" class="theme-toggle" aria-pressed="false" aria-label="Schakel dag/nacht">
-                  <span class="icon sun">☀️</span>
-                  <span class="icon moon">🌙</span>
-
+                    <span class="icon sun">☀️</span>
+                    <span class="icon moon">🌙</span>
+                </button>
             </div>
         </nav>
 
@@ -56,38 +54,35 @@
         <main>
             <section id="ledenLijst">
                 <h2>Ledenlijst</h2>
-              
-                <!-- Nieuwe container -->
                 <div class="list-container">
-                  <ul id="ledenUl"></ul>
-              </section>
+                    <ul id="ledenUl"></ul>
+                </div>
+            </section>
 
-              <section id="drankjesLijst" style="display: none;">
-                <button id="backToLeden">↩️Ledenlijst</button>
+            <section id="drankjesLijst" style="display: none;">
+                <button id="backToLeden">↩️ Ledenlijst</button>
                 <div class="list-container drinks-container">
-                <h2>Bar Lijst van <span id="currentMemberName"></span></h2>
-              
-                  <ul id="drankjesUl"></ul>
-                  <div id="drankjesDetails" class="drinks-grid"></div>
-              
-                  <div class="drinks-footer">
-                    <p id="totalAmount">Totaal: €0.00</p>
-                    <div class="footer-buttons">
-                      <!--<button id="clearBill" class="reset-button" type="button">Rekening legen</button>-->
-                      <button id="confirmOrder" type="button">Betaald</button>
+                    <h2>Bar Lijst van <span id="currentMemberName"></span></h2>
+                    <ul id="drankjesUl"></ul>
+                    <div id="drankjesDetails" class="drinks-grid"></div>
+                    <div class="drinks-footer">
+                        <p id="totalAmount">Totaal: €0.00</p>
+                        <div class="footer-buttons">
+                            <!--<button id="clearBill" class="reset-button" type="button">Rekening legen</button>-->
+                            <button id="confirmOrder" type="button">Betaald</button>
+                        </div>
                     </div>
-                  </div>
-              </section>
-                <!-- Footer toegevoegd -->
-    <footer>
-        <p>&copy; 2025 TapIn. Alle rechten voorbehouden.</p>
-        <p>Ontwikkeld door Mark Steenhuis</p>
-    </footer>
+                </div>
+            </section>
         </main>
-    </div>
-    
-    <script src="shared.js"></script>
-    <script src="index.js"></script>
 
+        <footer>
+            <p>&copy; 2025 TapIn. Alle rechten voorbehouden.</p>
+            <p>Ontwikkeld door Mark Steenhuis</p>
+        </footer>
+    </div>
+
+    <script src="js/shared.js"></script>
+    <script src="js/index.js"></script>
 </body>
 </html>

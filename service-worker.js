@@ -3,17 +3,17 @@ const CACHE_NAME = 'wilhelmina-bar-cache-v1';
 const FILES_TO_CACHE = [
   './',
   './index.html',
-  './admin.html',
-  './statistics.html',
+  './pages/admin.html',
+  './pages/statistics.html',
   './index.js',
   './admin.js',
   './statistics.js',
   './styles.css',
-  './favicon.png',
+  './assets/icons/favicon.png',
   './manifest.json',
   'https://wilhelminaleens.nl/wp-content/gallery/jubileumconcert-2017-85-jaar/Wilhelmina-Jubileumconcert-2017-152.jpg',
   'https://i0.wp.com/wilhelminaleens.nl/wp-content/uploads/2023/12/logo-Wilhelmina.png?fit=1920%2C976&ssl=1',
-  './offline.html'
+  './pages/offline.html'
 ];
 
 // Installeer en cache bestanden
@@ -56,7 +56,7 @@ self.addEventListener('fetch', event => {
     caches.match(event.request).then(response => {
       return response || fetch(event.request).catch(() => {
         // Als netwerkfout optreedt, geef de offlinepagina terug
-        return caches.match('./offline.html');
+        return caches.match('./pages/offline.html');
       });
     })
   );

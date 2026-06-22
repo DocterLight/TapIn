@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const customLogoEnabled = localStorage.getItem('customLogoEnabled') === 'true';
 
     if (fixedLogoEnabled) {
-      headerLogo.src = 'logo-Custom.jpg';
+      headerLogo.src = '/assets/images/logo-Custom.jpg';
       return;
     }
     if (customLogo && customLogoEnabled) {
@@ -101,8 +101,8 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     headerLogo.src = document.body.classList.contains('dark-mode')
-      ? 'logo-dark.png'
-      : 'logo-light.png';
+      ? '/assets/images/logo-dark.png'
+      : '/assets/images/logo-light.png';
   }
 
 
@@ -361,7 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // === Events voor formulieren en navigatie ===
   if (backButton) backButton.addEventListener('click', () => window.location.href = 'index.html');
-  if (statisticsButton) statisticsButton.addEventListener('click', () => window.location.href = 'statistics.html');
+  if (statisticsButton) statisticsButton.addEventListener('click', () => window.location.href = '/pages/statistics.html');
   if (addMemberForm) {
     addMemberForm.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -514,7 +514,7 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.removeItem('customLogoEnabled');
 
     const headerLogo = document.getElementById('headerLogo');
-    if (headerLogo) headerLogo.src = 'logo-light.png';
+    if (headerLogo) headerLogo.src = '/assets/images/logo-light.png';
     if (previewLogo) {
       previewLogo.src = '';
       previewLogo.style.display = 'none';

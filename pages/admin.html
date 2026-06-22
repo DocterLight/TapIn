@@ -1,36 +1,30 @@
 <!doctype html>
 <html lang="nl">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TapIn - AdminPaneel</title>
-  <link rel="stylesheet" href="shared.css">
-  <link rel="stylesheet" href="admin.css" />
-  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="../css/shared.css">
+  <link rel="stylesheet" href="../css/admin.css" />
+  <link rel="manifest" href="../manifest.json" />
   <meta name="theme-color" content="#0078d7" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
 </head>
-
 <body>
-  <!-- Notificatie popup (compact, geen overlay) -->
+  <!-- Notification popup -->
   <div id="notificationPopup" role="status" aria-live="polite">
     <div class="popup-content">
       <p id="notificationMessage"></p>
     </div>
   </div>
 
-  
-
-  <!-- Pincode popup (centreren + animaties) -->
-  <div id="pinPopup" class="popup" role="dialog" aria-modal="true" aria-labelledby="pinPopupTitle"
-    aria-describedby="pinPopupDesc">
+  <!-- PIN popup -->
+  <div id="pinPopup" class="popup" role="dialog" aria-modal="true" aria-labelledby="pinPopupTitle" aria-describedby="pinPopupDesc">
     <div class="popup-content">
       <h2 id="pinPopupTitle">Voer pincode in</h2>
       <p id="pinPopupDesc" style="margin:0 0 8px 0;">Bevestig je actie met de huidige pincode.</p>
-      <input type="password" id="popupPincodeInput" inputmode="numeric" autocomplete="one-time-code"
-        placeholder="Pincode" />
+      <input type="password" id="popupPincodeInput" inputmode="numeric" autocomplete="one-time-code" placeholder="Pincode" />
       <div class="popup-buttons" style="margin-top:12px; gap:10px; justify-content:flex-end;">
         <button id="confirmPopupButton" type="button">Bevestigen</button>
         <button id="cancelPopupButton" type="button">Annuleren</button>
@@ -38,7 +32,7 @@
     </div>
   </div>
 
-  <!-- Reset bevestiging popup -->
+  <!-- Reset confirmation popup -->
   <div id="resetPopup" class="popup" role="dialog" aria-modal="true" aria-labelledby="resetPopupTitle">
     <div class="popup-content">
       <h2 id="resetPopupTitle">Weet je het zeker?</h2>
@@ -52,7 +46,7 @@
 
   <div id="container">
     <header>
-      <img src="" alt="TapInlogo" id="headerLogo" width="250" height="100" />
+      <img src="" alt="TapIn logo" id="headerLogo" width="250" height="100" />
     </header>
 
     <nav>
@@ -68,24 +62,17 @@
 
     <main>
       <section id="adminPaneel">
-        <!-- === Sub-tabs === -->
+        <!-- Sub-tabs -->
         <div class="sub-tabs" role="tablist" aria-label="Beheer tabs">
-          <button class="sub-tab active" role="tab" aria-selected="true" aria-controls="leden"
-            data-tab="leden">Leden</button>
-          <button class="sub-tab" role="tab" aria-selected="false" aria-controls="whitelist"
-            data-tab="whitelist">Whitelist</button>
-          <button class="sub-tab" role="tab" aria-selected="false" aria-controls="drankjes"
-            data-tab="drankjes">Drankjes</button>
-          <button class="sub-tab" role="tab" aria-selected="false" aria-controls="layout" data-tab="layout">Logo &amp;
-            Achtergrond</button>
-          <button class="sub-tab" role="tab" aria-selected="false" aria-controls="pincode"
-            data-tab="pincode">Pincode</button>
-            <button class="sub-tab" role="tab" aria-selected="false" data-tab="logboek">
-              Logboek
-            </button>
+          <button class="sub-tab active" role="tab" aria-selected="true" aria-controls="leden" data-tab="leden">Leden</button>
+          <button class="sub-tab" role="tab" aria-selected="false" aria-controls="whitelist" data-tab="whitelist">Whitelist</button>
+          <button class="sub-tab" role="tab" aria-selected="false" aria-controls="drankjes" data-tab="drankjes">Drankjes</button>
+          <button class="sub-tab" role="tab" aria-selected="false" aria-controls="layout" data-tab="layout">Logo &amp; Achtergrond</button>
+          <button class="sub-tab" role="tab" aria-selected="false" aria-controls="pincode" data-tab="pincode">Pincode</button>
+          <button class="sub-tab" role="tab" aria-selected="false" aria-controls="logboek" data-tab="logboek">Logboek</button>
         </div>
 
-        <!-- === Leden tab === -->
+        <!-- Leden tab -->
         <div class="sub-tab-content active" id="leden" role="tabpanel">
           <div class="form-section">
             <h2>Voeg lid toe</h2>
@@ -100,7 +87,15 @@
           </div>
         </div>
 
-        <!-- === Drankjes tab === -->
+        <!-- Whitelist tab -->
+        <div class="sub-tab-content" id="whitelist" role="tabpanel" aria-hidden="true">
+          <div class="list-section">
+            <h2>Whitelist</h2>
+            <ul id="adminList"></ul>
+          </div>
+        </div>
+
+        <!-- Drankjes tab -->
         <div class="sub-tab-content" id="drankjes" role="tabpanel" aria-hidden="true">
           <div class="form-section">
             <h2>Voeg product toe</h2>
@@ -116,7 +111,7 @@
           </div>
         </div>
 
-        <!-- === Layout tab === -->
+        <!-- Layout tab -->
         <div class="sub-tab-content" id="layout" role="tabpanel" aria-hidden="true">
           <div class="form-section">
             <h2>Logo</h2>
@@ -124,14 +119,12 @@
               <input type="file" id="logo-upload" accept="image/*" />
             </form>
           </div>
-
           <div class="form-section">
             <h2>Achtergrond</h2>
             <form id="bgForm">
               <input type="file" id="bg-upload" accept="image/*" />
             </form>
           </div>
-
           <div class="form-section">
             <h2>Layout acties</h2>
             <div class="layout-actions">
@@ -140,13 +133,12 @@
               <button id="reset-layout" class="reset-button" type="button">Reset naar standaard</button>
             </div>
           </div>
-
           <div id="fullscreen-preview" aria-hidden="true">
             <img id="preview-logo" src="" alt="Logo preview" />
           </div>
         </div>
 
-        <!-- === Pincode tab === -->
+        <!-- Pincode tab -->
         <div class="sub-tab-content" id="pincode" role="tabpanel" aria-hidden="true">
           <div class="form-section">
             <h2>Pincode instellen</h2>
@@ -156,48 +148,29 @@
             </form>
           </div>
         </div>
-      </section>
 
-<!-- === Whitelist tab-->
-<div class="sub-tab-content" id="whitelist" role="tabpanel" aria-hidden="true">
-
-  <div class="list-section">
-    <h2>Whitelist</h2>
-
-    <ul id="adminList"></ul>
-
-  </div>
-
-</div>
-        
-<div class="sub-tab-content" id="logboek" role="tabpanel" aria-hidden="true">
-  
-  
-  <div class="list-section">
-
-    <div class="log-header">
-      <div class="log-filter">
-        <button id="logFilterBtn" class="filter-btn">⚙️ Filter</button>
-    
-        <div id="logFilterMenu" class="filter-menu hidden">
-          <button data-filter="all">Alles</button>
-          <button data-filter="lid">Leden</button>
-          <button data-filter="drankje">Drankjes</button>
-          <button data-filter="whitelist">Whitelist</button>
+        <!-- Logboek tab -->
+        <div class="sub-tab-content" id="logboek" role="tabpanel" aria-hidden="true">
+          <div class="list-section">
+            <div class="log-header">
+              <div class="log-filter">
+                <button id="logFilterBtn" class="filter-btn">⚙️ Filter</button>
+                <div id="logFilterMenu" class="filter-menu hidden">
+                  <button data-filter="all">Alles</button>
+                  <button data-filter="lid">Leden</button>
+                  <button data-filter="drankje">Drankjes</button>
+                  <button data-filter="whitelist">Whitelist</button>
+                </div>
+              </div>
+            </div>
+            <h2>📜 Logboek</h2>
+            <ul id="logList"></ul>
+          </div>
+          <div style="margin-top:10px;">
+            <button id="clearLogsBtn" type="button" class="reset-button">Logboek wissen</button>
+          </div>
         </div>
-      </div>
-    </div>
-
-    <h2>📜 Logboek</h2>
-    <ul id="logList"></ul>
-  </div>
-
-  <div style="margin-top:10px;">
-    <button id="clearLogsBtn" type="button" class="reset-button">
-      Logboek wissen
-    </button>
-  </div>
-</div>
+      </section>
 
       <footer>
         <p>&copy; 2025 TapIn. Alle rechten voorbehouden.</p>
@@ -206,7 +179,8 @@
       </footer>
     </main>
   </div>
-  <script src="admin.js"></script>
-</body>
 
+  <script src="../js/shared.js"></script>
+  <script src="../js/admin.js"></script>
+</body>
 </html>

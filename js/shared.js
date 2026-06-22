@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const customLogo = localStorage.getItem('customLogo');
       if (customLogo) { headerLogo.src = customLogo; return; }
       headerLogo.src = document.body.classList.contains('dark-mode')
-        ? 'logo-dark.png'
-        : 'logo-light.png';
+        ? '/assets/images/logo-dark.png'
+        : '/assets/images/logo-light.png';
     }
     updateLogo();
   
