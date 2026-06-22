@@ -1,5 +1,4 @@
-let pendingDrinkRemoval = null;
-let pinAction = null;
+
 document.addEventListener('DOMContentLoaded', () => {
   // --- Service Worker ---
   if ('serviceWorker' in navigator) {
@@ -11,6 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const GLOBAL_LIMIT = 25; // bedrag limiet
+
+  let pinAction = null;
 
   function evaluateMemberStatus(member) {
     if (member.exempt) {
@@ -35,9 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
     const item = notificationQueue[key];
     item.count++;
-  
     clearTimeout(item.timeout);
-  
     item.timeout = setTimeout(() => {
       const msg = messageBuilder(item.count);
       notify(msg);
@@ -47,12 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function safeAddLog(entry) {
     const logs = JSON.parse(localStorage.getItem("logs")) || [];
-  
     logs.push({
       ...entry,
-      timestamp: Date.now()
-    });
-  
+      timestamp: Date.now() });
     localStorage.setItem("logs", JSON.stringify(logs));
   }
 
@@ -104,8 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // standaard: wissel o.b.v. dark-mode
     if (headerLogo) {
       headerLogo.src = document.body.classList.contains('dark-mode')
-        ? 'logo-dark.png'
-        : 'logo-light.png';
+        ? '/assets/images/logo-dark.png'
+        : '/assets/images/logo-light.png';
     }
   }
 
@@ -153,8 +149,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // --- Navigatie knoppen ---
-  if (adminButton) adminButton.addEventListener('click', () => (location.href = 'admin.html'));
-  if (statisticsButton) statisticsButton.addEventListener('click', () => (location.href = 'statistics.html'));
+  if (adminButton) adminButton.addEventListener('click', () => (location.href = '/pages/admin.html'));
+  if (statisticsButton) statisticsButton.addEventListener('click', () => (location.href = '/pages/statistics.html'));
 
   // --- Ledenlijst laden ---
   function loadLedenList() {
